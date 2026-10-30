@@ -2,9 +2,9 @@
 
 Six slices, in order. Each one keeps `npm test` green.
 
-- [ ] **Slice 1: Pumpkins replace cacti.** Add pumpkin sprites and `PUMPKIN_COLOR`; make `obstacleSprite` return pumpkins for 'small'/'large'; renderer paints obstacles in the pumpkin colour. No gameplay change.
-- [ ] **Slice 2: Night sky with moon and drifting clouds; darkening with survival.** New `features/night-sky.ts` installed from `main.ts`. Pure darkening function in the feature exposed for test. Unit test for monotonic darkening.
-- [ ] **Slice 3: Dust puffs on jump and land.** New `features/dust-puffs.ts` subscribing to `jump` and `land`. Reset on `start`/`restart`. Unit test for puff lifecycle.
-- [ ] **Slice 4: Bats as a new ObstacleKind.** Grow union; add bat sprite; `obstacleSprite` returns bat; spawner emits a single-bat group with probability `BAT_PROBABILITY` after `BAT_UNLOCK_TICK`. Unit test on spawn.
-- [ ] **Slice 5: Ducking.** Grow `Intent` and `DinoPose`; wire ArrowDown through keyboard; `game.ts` tracks `duckUntil`; projectDino returns duck pose and lowered hitbox. Acceptance tests.
-- [ ] **Slice 6: Verify.** Run full `npm test`, update spec acceptance checkboxes with evidence, mark Status Completed.
+- [x] **Slice 1: Pumpkins replace cacti.** Pumpkin bitmaps replace cactus bitmaps under the same sprite names; renderer paints obstacles in `PALETTE.pumpkin` via a new optional `color` parameter on `drawSprite`.
+- [x] **Slice 2: Night sky with moon and drifting clouds; darkening with survival.** `src/features/night-sky.ts` installed from `main.ts`; pure `darkeningProgress` and `mixHex` helpers covered by `tests/night-sky.test.ts`.
+- [x] **Slice 3: Dust puffs on jump and land.** `src/features/dust-puffs.ts` subscribes to `jump`/`land`, draws from the `foreground` layer, resets on `start`/`restart`; covered by `tests/dust-puffs.test.ts`.
+- [ ] **Slice 4: Bats.** Not shipped in this iteration (Tier 2).
+- [ ] **Slice 5: Ducking.** Not shipped in this iteration (Tier 2).
+- [x] **Slice 6: Verify.** `npm test` is green (347/347); spec acceptance checkboxes updated with evidence; Status marked Tier 1 Completed.

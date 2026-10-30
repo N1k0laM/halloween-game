@@ -123,7 +123,8 @@ export function decide(payload, env) {
 
   const findings = findSecrets(content);
   if (findings.length === 0) return null;
-  const rows = describe(findings.map((pattern) => ({ pattern, file: inside })));
+  const insidePosix = inside.split('\\').join('/');
+  const rows = describe(findings.map((pattern) => ({ pattern, file: insidePosix })));
   return `Blocked: writing what looks like a secret into a file git would commit.\n${rows}\n\n${ADVICE}`;
 }
 

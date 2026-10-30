@@ -1,7 +1,7 @@
 # Functional Specification: Halloween Edition
 
 - **Topic:** A Halloween skin that keeps the core loop intact: pumpkins instead of cacti, a night sky that gets darker the longer you survive, dust puffs on jump and land, and bats you must duck under.
-- **Status:** In progress
+- **Status:** Tier 1 Completed; Tier 2 (bats + ducking) not shipped in this iteration
 - **Author:** emamicovic
 
 ---
@@ -21,26 +21,26 @@ Success looks like this: a returning player sees pumpkins, a moon and clouds wit
 ### 2.1 Pumpkins replace cacti
 
 - **Acceptance Criteria:**
-    - [ ] When a run begins, every spawned ground obstacle is drawn as a pumpkin (small or large) instead of a cactus. Its hitbox and spawn rules from spec 001 are unchanged.
-    - [ ] When the pumpkin fill is drawn, it uses the Halloween orange accent (`PALETTE.pumpkin`).
+    - [x] When a run begins, every spawned ground obstacle is drawn as a pumpkin (small or large) instead of a cactus. Its hitbox and spawn rules from spec 001 are unchanged. _(Verified: `src/sprites.ts` CACTUS_SMALL and CACTUS_LARGE bitmaps now hold pumpkin art; dimensions and hitboxes unchanged; `tests/sprites.test.ts` still passes.)_
+    - [x] When the pumpkin fill is drawn, it uses the Halloween orange accent (`PALETTE.pumpkin`). _(Verified: `src/render.ts` `drawObstacles` passes `PALETTE.pumpkin` to `drawSprite`; `tests/render.test.ts` "sets fillStyle only to PALETTE values" still passes.)_
 
 ### 2.2 Night sky with moon and drifting clouds
 
 - **Acceptance Criteria:**
-    - [ ] When the page opens, the background is a dark night-sky colour, a moon is visible in the top-right of the game area, and at least one cloud is drifting left-to-right across the sky.
-    - [ ] When a run advances, the clouds drift at their own slower pace independent of the world scroll. The moon stays fixed.
+    - [x] When the page opens, the background is a dark night-sky colour, a moon is visible in the top-right of the game area, and at least one cloud is drifting left-to-right across the sky. _(Verified by `tests/night-sky.test.ts` "paints a full-width sky above the ground" and "draws the moon as a disc".)_
+    - [x] When a run advances, the clouds drift at their own slower pace independent of the world scroll. The moon stays fixed. _(Verified by `tests/night-sky.test.ts` "draws drifting clouds in the sky, and they move between renders".)_
 
 ### 2.3 Survival changes the sky
 
 - **Acceptance Criteria:**
-    - [ ] When a run has lasted 60 seconds, the sky is visibly darker than at the start of the same run. The transition is monotonic and tops out before 90 seconds.
+    - [x] When a run has lasted 60 seconds, the sky is visibly darker than at the start of the same run. The transition is monotonic and tops out before 90 seconds. _(Verified by `tests/night-sky.test.ts` `darkeningProgress` block: 0 at tick 0, monotonically rising, 1 at `NIGHT_DARKEN_AT_TICK` = 3600 ticks = 60 s.)_
 
 ### 2.4 Reactions to events
 
 - **Acceptance Criteria:**
-    - [ ] When the dinosaur takes off, a short dust puff appears at its feet.
-    - [ ] When the dinosaur lands, a short dust puff appears at its feet.
-    - [ ] Both puffs fade within half a second and do not affect gameplay.
+    - [x] When the dinosaur takes off, a short dust puff appears at its feet. _(Verified by `tests/dust-puffs.test.ts` "appears at the dinosaur feet after a jump event".)_
+    - [x] When the dinosaur lands, a short dust puff appears at its feet. _(Verified by `tests/dust-puffs.test.ts` "also appears on land, and fades within DUST_FRAMES".)_
+    - [x] Both puffs fade within half a second and do not affect gameplay. _(Verified by the same test; puffs are drawn from the `foreground` layer and never touch GameState.)_
 
 ### 2.5 Bats
 

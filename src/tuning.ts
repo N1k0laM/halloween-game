@@ -13,12 +13,20 @@ export const CANVAS = { width: 800, height: 300 } as const;
 
 /**
  * The look: near-white background, dark grey foreground, and one red accent
- * used only for the game-over puddle (functional spec 2.9).
+ * used only for the game-over puddle (functional spec 2.9). Halloween skin
+ * adds the pumpkin orange, the moon's pale yellow, cloud grey, dust grey,
+ * and the two night sky stops.
  */
 export const PALETTE = {
   bg: '#f7f7f7',
   fg: '#535353',
   accent: '#c4302b',
+  pumpkin: '#ff8c1a',
+  moon: '#e8e4b8',
+  cloud: '#3a3a4a',
+  dust: '#9a9a9a',
+  nightSkyStart: '#2a2340',
+  nightSkyEnd: '#0a0515',
 } as const;
 
 /**
@@ -110,6 +118,21 @@ export const FRAME_CLAMP_MS = 100;
 
 /** Largest accepted seed (uint32). */
 export const MAX_SEED = 2 ** 32 - 1;
+
+/** Running tick at which the night sky reaches its deepest colour. */
+export const NIGHT_DARKEN_AT_TICK = 3600;
+
+/** How many render frames a dust puff lasts after a jump or land. */
+export const DUST_FRAMES = 30;
+
+/** How many clouds drift across the sky. */
+export const CLOUD_COUNT = 3;
+
+/** Cloud drift, in logical px per render frame. */
+export const CLOUD_DRIFT_PX_PER_FRAME = 0.6;
+
+/** Moon placement: centre and radius in logical px. */
+export const MOON = { cx: 700, cy: 60, radius: 18 } as const;
 
 /**
  * HUD layout, in logical px. Text is aligned to fixed anchors so font metrics

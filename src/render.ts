@@ -77,20 +77,21 @@ export interface Renderer {
 const NO_CAMERA: CameraFn = () => ({ x: 0, y: 0 });
 
 /**
- * Fills a sprite's pixel runs with `PALETTE.fg`, its top-left corner at (x, y)
- * snapped to whole logical pixels. State keeps exact float positions; only the
- * drawing is snapped, so no run lands between pixels and gets anti-aliased
- * grey edges (functional spec 2.9: one dark grey on one near-white).
+ * Fills a sprite's pixel runs with `color` (default `PALETTE.fg`), its
+ * top-left corner at (x, y) snapped to whole logical pixels. State keeps
+ * exact float positions; only the drawing is snapped, so no run lands between
+ * pixels and gets anti-aliased edges (functional spec 2.9).
  */
 export function drawSprite(
   ctx: DrawContext,
   sprite: Sprite,
   x: number,
   y: number,
+  color: string = PALETTE.fg,
 ): void {
   const originX = Math.round(x);
   const originY = Math.round(y);
-  ctx.fillStyle = PALETTE.fg;
+  ctx.fillStyle = color;
   for (const run of sprite.runs) {
     ctx.fillRect(originX + run.x, originY + run.y, run.width, run.height);
   }
@@ -127,7 +128,13 @@ export function dinoSprite(dino: GameState['dino']): Sprite {
 /** Every obstacle at its state position, its sprite chosen from `kind`. */
 export const drawObstacles: LayerDraw = (ctx, state) => {
   for (const obstacle of state.obstacles) {
-    drawSprite(ctx, obstacleSprite(obstacle.kind), obstacle.x, obstacle.y);
+    drawSprite(
+      ctx,
+      obstacleSprite(obstacle.kind),
+      obstacle.x,
+      obstacle.y,
+      PALETTE.pumpkin,
+    );
   }
 };
 

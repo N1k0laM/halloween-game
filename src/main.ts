@@ -3,6 +3,8 @@
 // the canvas and requestAnimationFrame. Everything else stays testable in Node.
 
 import { createBus } from './events.js';
+import { installDustPuffs } from './features/dust-puffs.js';
+import { installNightSky } from './features/night-sky.js';
 import { installPuddle } from './features/puddle.js';
 import { createGame } from './game.js';
 import { createKeyboard } from './input.js';
@@ -93,7 +95,9 @@ const canvas = findCanvas();
 fitCanvas(canvas);
 const renderer = createRenderer(canvas);
 // Cosmetic features plug in from outside the game loop (architecture 2.2).
+installNightSky({ game, renderer });
 installPuddle({ game, renderer });
+installDustPuffs({ game, renderer });
 // One keyboard reducer and one set of listeners for the page's lifetime.
 // `keyboard.reset()` on restart forgets any key still held from the crash, so
 // it does not count as already pressed in the next run.
