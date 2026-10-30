@@ -82,6 +82,36 @@ test('the game boots, renders and plays in a real browser', async ({
     },
   );
 
+  // 6b. Multiple restarts don't leak keyboard listeners (functional spec 2.7:
+  // every key press maps to one jump, no matter how many times the player has
+  // restarted). If the bootstrap re-attached a keyboard on every restart
+  // without disposing the previous one, the second restart press would be
+  // dispatched twice: once consumed in `dead` (the restart itself), and once
+  // left in the queue — then auto-consumed as a jump on tick 1 of the new run.
+  // Same seed means a no-input run always dies at the same score, so this
+  // leaves `dead` below unchanged for the reload check.
+  await page.keyboard.press('Space');
+  await page.waitForFunction(() => window.__dino.state().phase === 'running');
+  await page.waitForFunction(
+    () => window.__dino.state().phase === 'dead',
+    null,
+    { timeout: 4000 },
+  );
+  await page.keyboard.press('Space');
+  await page.waitForFunction(() => window.__dino.state().phase === 'running');
+  // Wait until ~10 ticks of running have elapsed (scrollX > 60 at START_SPEED).
+  // With the leak, the dino is mid auto-jump by now; without it, still grounded.
+  await page.waitForFunction(() => window.__dino.state().scrollX > 60);
+  const afterTwoRestarts = await page.evaluate(() => window.__dino.state());
+  expect(afterTwoRestarts.phase).toBe('running');
+  expect(afterTwoRestarts.dino.onGround).toBe(true);
+  // Let this run die too, so `dead` below is a fresh dying state for step 7.
+  await page.waitForFunction(
+    () => window.__dino.state().phase === 'dead',
+    null,
+    { timeout: 4000 },
+  );
+
   // 7. The high score survives a reload. A fresh Playwright context starts
   // with empty storage, so this run's final score is the first best score and
   // the death saved it. `page.on` listeners belong to the page, not the
