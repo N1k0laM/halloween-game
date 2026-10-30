@@ -784,6 +784,11 @@ describe('2.7 restarting', () => {
     expect(dead.obstacles.length).toBeGreaterThan(0);
     expect(dead.spawnLog.length).toBeGreaterThan(0);
     expect(dead.score).toBeGreaterThan(0);
+    // The run also lived past tick 0 and crept above START_SPEED, so the
+    // reset of `tick` and `speed` is observable (spec 2.7: the restarted
+    // run starts at the same pace as a run started from the start screen).
+    expect(dead.tick).toBeGreaterThan(0);
+    expect(dead.speed).toBeGreaterThan(START_SPEED);
     // It also beat hi 7, which is the one thing a restart keeps.
     expect(dead.hi).toBe(dead.score);
     const events = recordAll(game);
@@ -796,6 +801,8 @@ describe('2.7 restarting', () => {
     const s = game.state();
     expect(s.phase).toBe('running');
     expect(s.seed).toBe(9);
+    expect(s.tick).toBe(0);
+    expect(s.speed).toBe(START_SPEED);
     expect(s.score).toBe(0);
     expect(s.obstacles).toEqual([]);
     expect(s.spawnLog).toEqual([]);
